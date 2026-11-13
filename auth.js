@@ -111,7 +111,7 @@
     if (user) {
       var who = el("span", "who mono", user.email || "Signed in"); who.title = user.email || "";
       var out = el("button", "signout", "Sign out"); out.type = "button";
-      out.onclick = function () { clerk.signOut({ redirectUrl: location.pathname + location.hash }); };
+      out.onclick = function () { clerk.signOut({ redirectUrl: location.pathname + '?signed-out=1' + location.hash }); };
       slot.appendChild(who); slot.appendChild(out);
     } else {
       var inb = el("button", "signin", "Sign in"); inb.type = "button";
@@ -120,6 +120,10 @@
     }
   }
 
+  /* drop the helper query string that sign-in and sign-out add to force a page load */
+  ready.then(function () {
+    if (/[?&]signed-(in|out)=1/.test(location.search)) history.replaceState(null, '', location.pathname + location.hash);
+  });
   ready.then(render);
   document.addEventListener("DOMContentLoaded", render);
 
