@@ -357,7 +357,7 @@
     var u = ClipzAuth.user();
     showFor(u);
     var k = toolFromUrl(); select(k);
-    if (location.hash !== "#" + k) history.replaceState(null, "", "#" + k);
+    history.replaceState(null, "", location.pathname + "#" + k);
     if (!u) ClipzAuth.mountForm($("gate-form"), { path: "/tools.html", next: k, error: ClipzAuth.urlError() });
   });
   ClipzAuth.onChange(function (u) {

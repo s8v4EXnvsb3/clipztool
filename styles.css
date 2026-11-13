@@ -270,3 +270,6 @@ progress{flex:1;min-width:140px;height:6px;accent-color:var(--fg)}
 .auth-tabs button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
 .auth-tabs button:not([aria-pressed="true"]):hover{color:var(--fg)}
 .clerk-box{min-height:120px}
+
+/* hide Clerk's own title on the first screens only (the page already has a heading); keep it on later steps such as "Check your email" */
+.clerk-box .cl-signIn-start .cl-header,.clerk-box .cl-signUp-start .cl-header{display:none}
