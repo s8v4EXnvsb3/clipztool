@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roughcut · Free AI video tools</title>
+<meta name="description" content="A hand-sorted list of AI video tools you can use for free: generate clips, edit footage, add captions, record voiceovers and build presenters.">
+<meta name="theme-color" content="#11151b">
+<meta property="og:title" content="Roughcut · Free AI video tools">
+<meta property="og:description" content="Generate, edit, caption and voice video with tools that have a free plan, free credits or an open-source license.">
+<meta property="og:type" content="website">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="top">
+  <a class="mark" href="#top" aria-label="Roughcut home"><span class="mark-clip" aria-hidden="true"></span>Roughcut</a>
+  <nav aria-label="Main">
+    <a href="#tools">The bin</a>
+    <a href="#free">How free is free</a>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <p class="eyebrow mono">Free AI video tools · 5 jobs · 17 tools</p>
+    <h1>Pick the job.<br>Find a free tool for it.</h1>
+    <p class="lede">Roughcut is a short, hand-sorted list of video tools that cost nothing to start with. Each one has a free plan, free credits or an open-source license. Pick what you are trying to make and go straight to the site.</p>
+
+    <div class="timeline" id="timeline" aria-label="Video timeline showing the five jobs. Select a clip to filter the list.">
+      <div class="tl-readout">
+        <span class="mono tc" id="tc">00:00:00:00</span>
+        <span class="mono dim">24 fps · 30 s</span>
+      </div>
+      <div class="tl-body" id="tlbody">
+        <div class="ruler mono" aria-hidden="true"><span>0s</span><span>10s</span><span>20s</span><span>30s</span></div>
+        <div class="head" id="head" aria-hidden="true"></div>
+      </div>
+    </div>
+    <p class="hint mono">Select a clip to filter the list below.</p>
+  </section>
+
+  <section class="bin" id="tools" aria-labelledby="bin-h">
+    <div class="bin-head">
+      <h2 id="bin-h">The bin</h2>
+      <div class="controls">
+        <label class="sr" for="q">Search tools</label>
+        <input id="q" type="search" placeholder="Search by name or task" autocomplete="off">
+      </div>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="Filter by job"></div>
+    <div class="cols mono" aria-hidden="true"><span>Tool</span><span>Job</span><span>Free access</span><span>What it does</span><span></span></div>
+    <ul class="rows" id="rows"></ul>
+    <p class="empty" id="empty" hidden>Nothing matches that. Clear the search or pick another job.</p>
+  </section>
+
+  <section class="free" id="free" aria-labelledby="free-h">
+    <h2 id="free-h">How free is free</h2>
+    <p class="lede small">Free almost always comes with a catch. These are the four kinds you will run into, so you know what to expect before you sign up.</p>
+    <dl>
+      <div><dt>Free plan</dt><dd>You can use it as long as you like, with caps. Common limits are watermarks, lower resolution, shorter exports and fewer monthly minutes.</dd></div>
+      <div><dt>Credits</dt><dd>You get a pool of credits, often refilled daily or monthly. A short generated clip uses several, so expect a handful of clips, not hours.</dd></div>
+      <div><dt>Trial</dt><dd>Free for a limited time or a fixed amount. Good for testing whether the tool fits, not for a long project.</dd></div>
+      <div><dt>Open source</dt><dd>No account and no limits, but it runs on your own computer. Video models want a recent graphics card.</dd></div>
+    </dl>
+  </section>
+</main>
+
+<footer>
+  <p>Plans, prices and limits change often. Check each site before you build a project around it.</p>
+  <p class="dim">Roughcut is independent and is not affiliated with any tool listed. Links open the official sites.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
