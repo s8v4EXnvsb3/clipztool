@@ -273,3 +273,23 @@ progress{flex:1;min-width:140px;height:6px;accent-color:var(--fg)}
 
 /* hide Clerk's own title on the first screens only (the page already has a heading); keep it on later steps such as "Check your email" */
 #gate-form .cl-signIn-start .cl-header,#gate-form .cl-signUp-start .cl-header{display:none}
+
+/* right-hand sidebar listing the free tools */
+.ws{grid-template-columns:minmax(0,1fr) 270px;gap:32px}
+.ws>.mainc{grid-column:1;grid-row:1;min-width:0}
+.mainc .gate{max-width:none}
+.ws>.side{grid-column:2;grid-row:1;position:sticky;top:16px;align-self:start}
+.side-h{margin:0 0 10px;display:flex;justify-content:space-between;color:var(--dim);text-transform:uppercase;letter-spacing:.1em}
+.side-note{margin:12px 0 0;font-size:12px;line-height:1.5;color:var(--dim)}
+.tn{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.tn-out{font-size:11px;color:var(--dim);letter-spacing:.05em}
+.tn[aria-current="page"] .tn-out{color:var(--body)}
+@media (max-width:800px){
+  .ws{grid-template-columns:minmax(0,1fr);gap:20px}
+  .ws>.side{grid-column:1;grid-row:1;position:static;min-width:0}
+  .side .toolnav{max-width:100%}
+  .ws>.mainc{grid-column:1;grid-row:2;min-width:0}
+  .side-note,.tn-out{display:none}
+}
+
+.toolnav{position:relative}

@@ -169,11 +169,24 @@
   var cur = "trim", files = [], durations = [], busy = false, resultUrl = null;
   var nav = $("toolnav"), form = $("opts"), list = $("filelist"), status = $("status"), bar = $("bar"), result = $("result"), runBtn = $("run"), input = $("file");
 
+  var FORMAT = { trim: "MP4", gif: "GIF", audio: "MP3", compress: "MP4", resize: "MP4", speed: "MP4", merge: "MP4", watermark: "MP4" };
   Object.keys(TOOLS).forEach(function (k) {
     var b = document.createElement("a");
-    b.href = "#" + k; b.className = "tn"; b.dataset.k = k; b.textContent = TOOLS[k].name;
+    b.href = "#" + k; b.className = "tn"; b.dataset.k = k;
+    var nm = document.createElement("span"); nm.textContent = TOOLS[k].name;
+    var fm = document.createElement("span"); fm.className = "tn-out mono"; fm.textContent = FORMAT[k] || "";
+    b.appendChild(nm); b.appendChild(fm);
     nav.appendChild(b);
   });
+  $("side-count").textContent = Object.keys(TOOLS).length;
+
+  /* keep the selected tool visible when the list scrolls sideways (phones) */
+  function scrollActive() {
+    var a = nav.querySelector('[aria-current="page"]');
+    if (a && nav.scrollWidth > nav.clientWidth) nav.scrollLeft = a.offsetLeft - (nav.clientWidth - a.offsetWidth) / 2;
+  }
+
+  window.addEventListener("resize", scrollActive);
 
   function say(msg, cls) { status.textContent = msg; status.className = "status " + (cls || ""); }
   function fmtSize(b) { return b > 1048576 ? (b / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(b / 1024)) + " KB"; }
@@ -260,13 +273,19 @@
     if (!TOOLS[k]) k = "trim";
     cur = k; var t = TOOLS[k];
     [].forEach.call(nav.children, function (a) { a.setAttribute("aria-current", a.dataset.k === k ? "page" : "false"); });
+    scrollActive();
     $("tool-title").textContent = t.name; $("tool-blurb").textContent = t.blurb;
     input.multiple = !!t.multi;
     if (!t.multi && files.length > 1) { files = files.slice(0, 1); durations = durations.slice(0, 1); }
     renderOpts(t.defaults && durations[0] ? t.defaults(durations[0]) : null);
     clearResult(); say(""); renderFiles();
   }
-  window.addEventListener("hashchange", function () { var k = location.hash.slice(1); if (!busy && TOOLS[k]) select(k); });
+  window.addEventListener("hashchange", function () {
+    var k = location.hash.slice(1);
+    if (busy || !TOOLS[k]) return;
+    select(k);
+    if (!signedIn) { try { localStorage.setItem("clipz_next", k); } catch (e) {} }
+  });
 
   input.addEventListener("change", function () { addFiles(input.files); input.value = ""; });
   var drop = $("drop");
@@ -351,7 +370,7 @@
     return nx && TOOLS[nx] ? nx : "trim";
   }
   var signedIn = false;
-  function showFor(u) { signedIn = !!u; $("gate").hidden = !!u; $("app").hidden = !u; }
+  function showFor(u) { signedIn = !!u; $("gate").hidden = !!u; $("app").hidden = !u; if (u) scrollActive(); }
   select("trim");
   ClipzAuth.ready.then(function () {
     var u = ClipzAuth.user();

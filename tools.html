@@ -32,39 +32,44 @@
     <p class="lede small">Pick a tool, add a video and press Run. Sign in with your email, then your video is processed on this computer and never uploaded anywhere.</p>
   </div>
 
-  <section class="gate" id="gate" hidden aria-labelledby="gate-h">
-    <p class="eyebrow mono">Free account</p>
-    <h2 id="gate-h">Sign in to use the editor</h2>
-    <p class="dim">New here? Choose Create account. Already have an account? Choose Sign in. We email you a one-time link, so there is no password to remember.</p>
-    <div id="gate-form"></div>
-  </section>
-
-  <div id="app" hidden>
   <div class="ws">
-    <nav class="toolnav" id="toolnav" aria-label="Editing tools"></nav>
+    <div class="mainc">
+      <section class="gate" id="gate" hidden aria-labelledby="gate-h">
+        <p class="eyebrow mono">Free account</p>
+        <h2 id="gate-h">Sign in to use the editor</h2>
+        <p class="dim">New here? Choose Create account. Already have an account? Choose Sign in. We email you a one-time link, so there is no password to remember.</p>
+        <div id="gate-form"></div>
+      </section>
 
-    <section class="panel" aria-labelledby="tool-title">
-      <h2 id="tool-title"></h2>
-      <p class="dim" id="tool-blurb"></p>
+      <div id="app" hidden>
+        <section class="panel" aria-labelledby="tool-title">
+          <h2 id="tool-title"></h2>
+          <p class="dim" id="tool-blurb"></p>
 
-      <label class="drop" id="drop" for="file">
-        <input id="file" type="file" accept="video/*,.mkv,.mov">
-        <span id="drop-text">Choose a video, or drop it here</span>
-        <span class="mono dim">MP4, MOV, WebM · up to 700 MB</span>
-      </label>
-      <ul class="files" id="filelist"></ul>
+          <label class="drop" id="drop" for="file">
+            <input id="file" type="file" accept="video/*,.mkv,.mov">
+            <span id="drop-text">Choose a video, or drop it here</span>
+            <span class="mono dim">MP4, MOV, WebM · up to 700 MB</span>
+          </label>
+          <ul class="files" id="filelist"></ul>
 
-      <div class="opts" id="opts"></div>
+          <div class="opts" id="opts"></div>
 
-      <div class="row-act">
-        <button class="btn" id="run" type="button" disabled>Run</button>
-        <progress id="bar" max="1" value="0" hidden></progress>
+          <div class="row-act">
+            <button class="btn" id="run" type="button" disabled>Run</button>
+            <progress id="bar" max="1" value="0" hidden></progress>
+          </div>
+          <p class="status" id="status" role="status" aria-live="polite"></p>
+          <div class="result" id="result" hidden></div>
+        </section>
       </div>
-      <p class="status" id="status" role="status" aria-live="polite"></p>
-      <div class="result" id="result" hidden></div>
-    </section>
-  </div>
+    </div>
 
+    <aside class="side" aria-labelledby="side-h">
+      <p class="side-h mono" id="side-h"><span>Free tools</span><span id="side-count">8</span></p>
+      <nav class="toolnav" id="toolnav" aria-label="Editing tools"></nav>
+      <p class="side-note">Everything runs on your device. Nothing is uploaded.</p>
+    </aside>
   </div>
 
   <p class="note-small dim">The first run downloads the video engine, about 25 MB, then it is cached. Long or very large videos can be slow or run out of memory, especially on phones. These tools use ffmpeg running in WebAssembly.</p>
