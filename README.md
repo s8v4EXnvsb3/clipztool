@@ -45,4 +45,9 @@ The built-in editor needs an account. Sign-in uses Clerk with email links (no pa
 
 ## Analytics
 
-Page views are counted with Vercel Web Analytics through `analytics.js` (the Next.js package `@vercel/analytics/next` does not apply to a static site). It only works after Web Analytics is enabled for the project in the Vercel dashboard: Project, Analytics tab, Enable. It is cookie-free and does not run on localhost.
+Page views are counted with Vercel Web Analytics using the `@vercel/analytics` npm package. The Next.js entry (`@vercel/analytics/next`) does not apply to a static site, so `analytics.js` loads the package's browser module from `vendor/vercel-analytics/` and calls `inject()`.
+
+- It only records data after Web Analytics is enabled for the project in the Vercel dashboard (Project, Analytics tab, Enable).
+- It is cookie-free and does not run on localhost.
+- To update: `npm update @vercel/analytics`, then copy `node_modules/@vercel/analytics/dist/index.mjs` over `vendor/vercel-analytics/index.js`.
+- `window.ClipzTrack(name, data)` sends a custom event once analytics has loaded.
