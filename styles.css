@@ -275,9 +275,9 @@ progress{flex:1;min-width:140px;height:6px;accent-color:var(--fg)}
 #gate-form .cl-signIn-start .cl-header,#gate-form .cl-signUp-start .cl-header{display:none}
 
 /* landing page: right-hand sidebar listing the free tools */
-.home-grid{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:40px;align-items:start}
-.home-main{grid-column:1;grid-row:1;min-width:0}
-.home-side{grid-column:2;grid-row:1;position:sticky;top:16px;padding-top:34px}
+.home-grid{display:grid;grid-template-columns:270px minmax(0,1fr);gap:40px;align-items:start}
+.home-main{grid-column:2;grid-row:1;min-width:0}
+.home-side{grid-column:1;grid-row:1;position:sticky;top:16px;padding-top:34px}
 .side-h{margin:0 0 10px;display:flex;justify-content:space-between;color:var(--dim);text-transform:uppercase;letter-spacing:.1em}
 .side-note{margin:12px 0 0;font-size:12px;line-height:1.5;color:var(--dim)}
 .home-side .tn{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
