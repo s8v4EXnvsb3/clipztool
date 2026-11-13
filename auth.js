@@ -39,9 +39,9 @@
     form.noValidate = false;
     var lab = el("label", "sr", "Email address"); lab.htmlFor = "auth-email-" + (mountForm.n = (mountForm.n || 0) + 1);
     var inp = el("input"); inp.type = "email"; inp.id = lab.htmlFor; inp.required = true; inp.autocomplete = "email"; inp.placeholder = "you@example.com"; inp.inputMode = "email";
-    var btn = el("button", "btn", "Email me a sign-in link"); btn.type = "submit";
+    var btn = el("button", "btn", "Sign me in"); btn.type = "submit";
     var msg = el("p", "auth-msg"); msg.setAttribute("role", "status"); msg.setAttribute("aria-live", "polite");
-    var fine = el("p", "auth-fine dim", "No password. New here? The same link creates your account.");
+    var fine = el("p", "auth-fine dim", "We email you a one-time link. No password. New here? The same link creates your account.");
     form.appendChild(lab); form.appendChild(inp); form.appendChild(btn);
     root.appendChild(form); root.appendChild(msg); root.appendChild(fine);
     if (opts.error) { msg.textContent = opts.error; msg.className = "auth-msg err"; }
@@ -70,33 +70,20 @@
       if (!email) return;
       btn.disabled = true; btn.textContent = "Sending..."; msg.textContent = ""; msg.className = "auth-msg";
       store("clipz_next", opts.next || null);
-      sb.auth.signInWithOtp({ email: email, options: { emailRedirectTo: location.origin + (opts.path || "/") } }).then(function (r) {
-        if (r.error) { btn.disabled = false; btn.textContent = "Email me a sign-in link"; msg.textContent = friendly(r.error); msg.className = "auth-msg err"; }
+      sb.auth.signInWithOtp({ email: email, options: { emailRedirectTo: location.origin + (opts.path || "/tools.html") } }).then(function (r) {
+        if (r.error) { btn.disabled = false; btn.textContent = "Sign me in"; msg.textContent = friendly(r.error); msg.className = "auth-msg err"; }
         else sent(email);
-      }, function () { btn.disabled = false; btn.textContent = "Email me a sign-in link"; msg.textContent = friendly(); msg.className = "auth-msg err"; });
+      }, function () { btn.disabled = false; btn.textContent = "Sign me in"; msg.textContent = friendly(); msg.className = "auth-msg err"; });
     });
   }
 
-  /* ---- dialog ---- */
-  var dlg = null, dlgBody = null, dlgTitle = null, dlgLead = null;
-  function buildDialog() {
-    dlg = el("dialog", "auth-dlg"); dlg.setAttribute("aria-labelledby", "auth-ttl");
-    var close = el("button", "auth-x", "×"); close.type = "button"; close.setAttribute("aria-label", "Close");
-    dlgTitle = el("h2", null, "Create your free account"); dlgTitle.id = "auth-ttl";
-    dlgLead = el("p", "dim");
-    dlgBody = el("div", "auth-body");
-    dlg.appendChild(close); dlg.appendChild(dlgTitle); dlg.appendChild(dlgLead); dlg.appendChild(dlgBody);
-    document.body.appendChild(dlg);
-    close.onclick = function () { dlg.close ? dlg.close() : dlg.removeAttribute("open"); };
-    dlg.addEventListener("click", function (e) { if (e.target === dlg) close.onclick(); });
-  }
-  function requireLogin(opts) {
-    opts = opts || {};
-    if (!dlg) buildDialog();
-    dlgLead.textContent = opts.message || "Enter your email and we will send you a link. It takes a few seconds.";
-    mountForm(dlgBody, { path: opts.path || "/", next: opts.next, error: opts.error || urlError });
-    if (dlg.showModal) { if (!dlg.open) dlg.showModal(); } else dlg.setAttribute("open", "");
-    var i = dlgBody.querySelector("input"); if (i) i.focus();
+  /* ---- sign-in lives on the editor page: focus its form there, or go there ---- */
+  function goSignIn(next) {
+    var box = document.getElementById("gate-form");
+    if (box) {
+      var g = document.getElementById("gate"); if (g) g.scrollIntoView({ behavior: "smooth", block: "center" });
+      var i = box.querySelector("input"); if (i) i.focus({ preventScroll: true });
+    } else location.href = "tools.html" + (next ? "#" + next : "");
   }
 
   /* ---- header widget ---- */
@@ -106,12 +93,12 @@
     slot.textContent = "";
     if (user) {
       var who = el("span", "who mono", user.email || "Signed in"); who.title = user.email || "";
-      var out = el("button", "linklike", "Sign out"); out.type = "button";
+      var out = el("button", "signout", "Sign out"); out.type = "button";
       out.onclick = function () { sb.auth.signOut(); };
       slot.appendChild(who); slot.appendChild(out);
     } else {
       var inb = el("button", "signin", "Sign in"); inb.type = "button";
-      inb.onclick = function () { requireLogin({ path: location.pathname.indexOf("tools") > -1 ? "/tools.html" : "/", next: null }); };
+      inb.onclick = function () { goSignIn(null); };
       slot.appendChild(inb);
     }
   }
@@ -127,7 +114,7 @@
     ready: ready,
     user: function () { return user; },
     onChange: function (f) { listeners.push(f); },
-    requireLogin: requireLogin,
+    goSignIn: goSignIn,
     mountForm: mountForm,
     urlError: function () { return urlError; }
   };

@@ -278,7 +278,7 @@
 
   function run() {
     if (busy || !files.length) return;
-    if (!ClipzAuth.user()) { ClipzAuth.requireLogin({ path: "/tools.html", next: cur, message: "Your session ended. Sign in again to continue." }); return; }
+    if (!ClipzAuth.user()) { showFor(null); ClipzAuth.mountForm($("gate-form"), { path: "/tools.html", next: cur, error: "Your session ended. Sign in again to continue." }); return; }
     var t = TOOLS[cur], opts = readOpts(), names = [], outName = null, spec;
     clearResult(); setBusy(true); bar.hidden = false; bar.value = 0;
     say(ff ? "Reading your video..." : "Loading the video engine (about 25 MB, first time only)...");
