@@ -1,4 +1,4 @@
-# Roughcut
+# Clipztool
 
 A small static site that lists AI video tools you can start using for free, grouped by job: generate, edit, captions, voice and avatar.
 
