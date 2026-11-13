@@ -26,15 +26,16 @@ Eight browser tools: trim, video to GIF, extract audio, compress, resize for Sho
 
 The engine lives in `vendor/ffmpeg/` (`@ffmpeg/ffmpeg` 0.12.10 and the single-thread `@ffmpeg/core` 0.12.6). It is self-hosted so it works on any static host without special headers. The core includes FFmpeg and x264, which are licensed under the GPL; see https://ffmpeg.org/legal.html.
 
-## Sign-in (Supabase)
+## Sign-in (Clerk)
 
-The built-in editor needs an account. Sign-in is passwordless: visitors enter their email and get a magic link, powered by Supabase Auth.
+The built-in editor needs an account. Sign-in uses Clerk with email links (no password).
 
-- `auth.js` holds the project URL and the **publishable** key, which are public by design. Never put a secret or `service_role` key in the front-end.
-- `vendor/supabase/supabase.js` is `@supabase/supabase-js` 2.58.0, self-hosted.
-- Auth settings (Site URL, allowed redirect URLs) live in the Supabase project. If the domain changes, update both in the Supabase dashboard under Authentication, URL Configuration.
-- The gate is client-side. The tools run in the visitor's browser, so it controls the user experience but cannot technically stop a determined person from using the files directly.
-- Supabase's built-in email sender is limited to a few emails per hour. Before a real launch, add a custom SMTP provider in the Supabase dashboard under Authentication, Emails.
+-  holds the Clerk **publishable** key (), which is public by design. Never put a secret key () in the front-end.
+- Clerk 6 loads two scripts from the app's Clerk domain: the core script and a separate UI script. Both are loaded in .
+- Required Clerk dashboard settings: Email address on; Password off; verification by Email link; social logins off.
+- The current key is for a **development** Clerk instance. A production instance needs a domain you own (it does not work on vercel.app). Switch the key in  when you go live.
+- The gate is client-side. The tools run in the visitor's browser, so it controls the experience but cannot stop a determined person using the files directly.
+- Every page only talks to , so the provider can be changed by editing .
 
 ## Blog and sponsors
 

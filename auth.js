@@ -1,80 +1,97 @@
-/* Clipztool sign-in: passwordless magic links through Supabase Auth.
-   The URL and key below are public by design (publishable key). Never put a secret key in this file. */
+/* Clipztool sign-in: passwordless email links through Clerk.
+   The publishable key is public by design. Never put a secret key (sk_...) in this file.
+   The rest of the site only talks to window.ClipzAuth, so the provider can be swapped by editing this file. */
 (function () {
-  var SB_URL = "https://ymmuwicqtmtztwydgpfy.supabase.co";
-  var SB_KEY = "sb_publishable_bNPA44zwtLw91JdPQyJJKQ_QiFIF15l";
-  var COOLDOWN = 60;
+  var PUBLISHABLE_KEY = "pk_test_dmFsaWQtYmlzb24tMjM0NS5jbGVyay5hY2NvdW50cy5kZXYk";
+  var CLERK_MAJOR = "6", UI_MAJOR = "1";
+  var FRONTEND_API = atob(PUBLISHABLE_KEY.split("_")[2]).replace(/\$$/, "");
 
-  /* An expired or reused link comes back as #error=...; read it before the client clears the hash. */
-  var urlError = null;
-  (function () {
-    var h = location.hash.replace(/^#/, "");
-    if (/(^|&)error(_code|_description)?=/.test(h)) {
-      var p = new URLSearchParams(h);
-      urlError = p.get("error_code") === "otp_expired"
-        ? "That sign-in link has expired or was already used. Enter your email to get a new one."
-        : (p.get("error_description") || "Sign-in did not work. Please try again.");
-    }
-  })();
-
-  var sb = null, user = null, listeners = [];
-  try {
-    sb = window.supabase.createClient(SB_URL, SB_KEY, { auth: { flowType: "implicit", detectSessionInUrl: true, persistSession: true, autoRefreshToken: true } });
-  } catch (e) { sb = null; }
+  var clerk = null, user = null, listeners = [], mounted = null;
 
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
   function store(k, v) { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} }
-  function friendly(err) {
-    var m = (err && err.message) || "";
-    if ((err && err.status === 429) || /rate limit|too many|seconds/i.test(m)) return "Too many sign-in emails were requested. Wait a minute and try again.";
-    if (/invalid.*email|email.*invalid/i.test(m)) return "That email address does not look right.";
-    return "We could not send the link. Check your connection and try again.";
+  function toUser(u) {
+    if (!u) return null;
+    var a = u.primaryEmailAddress || (u.emailAddresses && u.emailAddresses[0]);
+    return { id: u.id, email: a ? a.emailAddress : "" };
   }
 
-  /* ---- the sign-in form, used in the dialog and in the editor gate ---- */
+  /* Match the black site design inside Clerk's prebuilt component (both old and new variable names). */
+  var APPEARANCE = {
+    variables: {
+      colorPrimary: "#ecebe8", colorPrimaryForeground: "#0a0a0a", colorTextOnPrimaryBackground: "#0a0a0a",
+      colorBackground: "#101010", colorForeground: "#ecebe8", colorText: "#ecebe8",
+      colorMutedForeground: "#85847f", colorTextSecondary: "#85847f",
+      colorInput: "#0a0a0a", colorInputForeground: "#ecebe8", colorInputBackground: "#0a0a0a", colorInputText: "#ecebe8",
+      colorNeutral: "#ecebe8", colorDanger: "#ff9d9d", borderRadius: "2px",
+      fontFamily: "Archivo, system-ui, sans-serif", fontFamilyButtons: "Archivo, system-ui, sans-serif"
+    },
+    elements: {
+      rootBox: { width: "100%" },
+      footerAction: { display: "none" },
+      header: { display: "none" },
+      cardBox: { width: "100%", boxShadow: "none", border: "none", background: "transparent" },
+      card: { boxShadow: "none", border: "none", background: "transparent", padding: "0" }
+    }
+  };
+
+  /* ---- load Clerk (core script plus the separate UI script that holds the sign-in screens) ---- */
+  function loadScript(src, withKey) {
+    return new Promise(function (res, rej) {
+      var s = document.createElement('script');
+      s.async = true; s.crossOrigin = 'anonymous';
+      if (withKey) s.setAttribute('data-clerk-publishable-key', PUBLISHABLE_KEY);
+      s.src = src; s.onload = res; s.onerror = function () { rej(new Error('Could not load ' + src)); };
+      document.head.appendChild(s);
+    });
+  }
+  var base = 'https://' + FRONTEND_API + '/npm/@clerk/';
+  var ready = Promise.all([
+    loadScript(base + 'clerk-js@' + CLERK_MAJOR + '/dist/clerk.browser.js', true),
+    loadScript(base + 'ui@' + UI_MAJOR + '/dist/ui.browser.js', false)
+  ]).then(function () {
+    return window.Clerk.load({ ui: { ClerkUI: window.__internal_ClerkUICtor }, appearance: APPEARANCE, localization: { formButtonPrimary: 'Sign me in' } });
+  }).then(function () {
+    clerk = window.Clerk;
+    user = toUser(clerk.user);
+    clerk.addListener(function (r) {
+      var was = !!user;
+      user = toUser(r.user);
+      if (user) unmountForm();
+      render();
+      if (was !== !!user) listeners.forEach(function (f) { f(user); });
+    });
+  }).catch(function (e) { console.error('Clerk failed to load', e); });
+
+  /* ---- the sign-in form: Clerk's prebuilt component, with our own Sign in / Create account switch ---- */
+  function unmountForm() {
+    if (!mounted || !clerk) return;
+    try { if (mounted.mode === 'up') clerk.unmountSignUp(mounted.node); else clerk.unmountSignIn(mounted.node); } catch (e) {}
+    mounted = null;
+  }
   function mountForm(root, opts) {
     opts = opts || {};
-    root.textContent = "";
-    var form = el("form", "auth-form");
-    form.noValidate = false;
-    var lab = el("label", "sr", "Email address"); lab.htmlFor = "auth-email-" + (mountForm.n = (mountForm.n || 0) + 1);
-    var inp = el("input"); inp.type = "email"; inp.id = lab.htmlFor; inp.required = true; inp.autocomplete = "email"; inp.placeholder = "you@example.com"; inp.inputMode = "email";
-    var btn = el("button", "btn", "Sign me in"); btn.type = "submit";
-    var msg = el("p", "auth-msg"); msg.setAttribute("role", "status"); msg.setAttribute("aria-live", "polite");
-    var fine = el("p", "auth-fine dim", "We email you a one-time link. No password. New here? The same link creates your account.");
-    form.appendChild(lab); form.appendChild(inp); form.appendChild(btn);
-    root.appendChild(form); root.appendChild(msg); root.appendChild(fine);
-    if (opts.error) { msg.textContent = opts.error; msg.className = "auth-msg err"; }
-
-    function sent(email) {
-      root.textContent = "";
-      root.appendChild(el("h3", "auth-sent", "Check your inbox"));
-      var p = el("p", "auth-sentp"); p.appendChild(document.createTextNode("We sent a sign-in link to "));
-      p.appendChild(el("strong", null, email)); p.appendChild(document.createTextNode(". Open it on this device to continue. It works once and expires in an hour. Check spam if you do not see it."));
-      root.appendChild(p);
-      var row = el("div", "auth-row");
-      var again = el("button", "btn alt", ""); again.type = "button";
-      var other = el("button", "linklike", "Use a different email"); other.type = "button";
-      row.appendChild(again); row.appendChild(other); root.appendChild(row);
-      var left = COOLDOWN, timer;
-      function tick() { if (left > 0) { again.disabled = true; again.textContent = "Resend in " + left + "s"; left--; timer = setTimeout(tick, 1000); } else { again.disabled = false; again.textContent = "Resend the link"; } }
-      tick();
-      again.onclick = function () { clearTimeout(timer); mountForm(root, opts); root.querySelector("input").value = email; root.querySelector("form").requestSubmit(); };
-      other.onclick = function () { clearTimeout(timer); mountForm(root, opts); root.querySelector("input").focus(); };
+    unmountForm();
+    root.textContent = '';
+    if (opts.error) root.appendChild(el('p', 'auth-msg err', opts.error));
+    if (!clerk) { root.appendChild(el('p', 'auth-msg err', 'Sign-in is unavailable right now. Reload the page and try again.')); return; }
+    var dest = location.origin + (opts.path || '/tools.html') + (opts.next ? '#' + opts.next : '');
+    store('clipz_next', opts.next || null);
+    var tabs = el('div', 'auth-tabs'), bIn = el('button', null, 'Sign in'), bUp = el('button', null, 'Create account');
+    bIn.type = 'button'; bUp.type = 'button';
+    tabs.appendChild(bIn); tabs.appendChild(bUp);
+    var box = el('div', 'clerk-box');
+    root.appendChild(tabs); root.appendChild(box);
+    function show(mode) {
+      unmountForm();
+      var props = { forceRedirectUrl: dest, fallbackRedirectUrl: dest, routing: 'virtual' };
+      if (mode === 'up') clerk.mountSignUp(box, props); else clerk.mountSignIn(box, props);
+      mounted = { node: box, mode: mode };
+      bIn.setAttribute('aria-pressed', mode === 'in'); bUp.setAttribute('aria-pressed', mode === 'up');
     }
-
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      if (!sb) { msg.textContent = "Sign-in is unavailable right now. Reload the page and try again."; msg.className = "auth-msg err"; return; }
-      var email = inp.value.trim().toLowerCase();
-      if (!email) return;
-      btn.disabled = true; btn.textContent = "Sending..."; msg.textContent = ""; msg.className = "auth-msg";
-      store("clipz_next", opts.next || null);
-      sb.auth.signInWithOtp({ email: email, options: { emailRedirectTo: location.origin + (opts.path || "/tools.html") } }).then(function (r) {
-        if (r.error) { btn.disabled = false; btn.textContent = "Sign me in"; msg.textContent = friendly(r.error); msg.className = "auth-msg err"; }
-        else sent(email);
-      }, function () { btn.disabled = false; btn.textContent = "Sign me in"; msg.textContent = friendly(); msg.className = "auth-msg err"; });
-    });
+    bIn.onclick = function () { show('in'); };
+    bUp.onclick = function () { show('up'); };
+    show(opts.mode === 'up' ? 'up' : 'in');
   }
 
   /* ---- sign-in lives on the editor page: focus its form there, or go there ---- */
@@ -94,7 +111,7 @@
     if (user) {
       var who = el("span", "who mono", user.email || "Signed in"); who.title = user.email || "";
       var out = el("button", "signout", "Sign out"); out.type = "button";
-      out.onclick = function () { sb.auth.signOut(); };
+      out.onclick = function () { clerk.signOut({ redirectUrl: location.pathname + location.hash }); };
       slot.appendChild(who); slot.appendChild(out);
     } else {
       var inb = el("button", "signin", "Sign in"); inb.type = "button";
@@ -103,11 +120,7 @@
     }
   }
 
-  var ready = sb
-    ? sb.auth.getSession().then(function (r) { user = r.data && r.data.session ? r.data.session.user : null; }, function () { user = null; })
-    : Promise.resolve();
   ready.then(render);
-  if (sb) sb.auth.onAuthStateChange(function (ev, s) { user = s ? s.user : null; render(); listeners.forEach(function (f) { f(user); }); });
   document.addEventListener("DOMContentLoaded", render);
 
   window.ClipzAuth = {
@@ -116,6 +129,6 @@
     onChange: function (f) { listeners.push(f); },
     goSignIn: goSignIn,
     mountForm: mountForm,
-    urlError: function () { return urlError; }
+    urlError: function () { return null; }
   };
 })();
