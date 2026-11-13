@@ -30,12 +30,12 @@ The engine lives in `vendor/ffmpeg/` (`@ffmpeg/ffmpeg` 0.12.10 and the single-th
 
 The built-in editor needs an account. Sign-in uses Clerk with email links (no password).
 
--  holds the Clerk **publishable** key (), which is public by design. Never put a secret key () in the front-end.
-- Clerk 6 loads two scripts from the app's Clerk domain: the core script and a separate UI script. Both are loaded in .
+- `auth.js` holds the Clerk **publishable** key (`pk_...`), which is public by design. Never put a secret key (`sk_...`) in the front-end.
+- Clerk 6 loads two scripts from the app's Clerk domain: the core script and a separate UI script. Both are loaded in `auth.js`.
 - Required Clerk dashboard settings: Email address on; Password off; verification by Email link; social logins off.
-- The current key is for a **development** Clerk instance. A production instance needs a domain you own (it does not work on vercel.app). Switch the key in  when you go live.
+- The current key is for a **development** Clerk instance. A production instance needs a domain you own (it does not work on vercel.app). Switch the key in `auth.js` when you go live.
 - The gate is client-side. The tools run in the visitor's browser, so it controls the experience but cannot stop a determined person using the files directly.
-- Every page only talks to , so the provider can be changed by editing .
+- Every page only talks to `window.ClipzAuth`, so the provider can be changed by editing `auth.js`.
 
 ## Blog and sponsors
 
