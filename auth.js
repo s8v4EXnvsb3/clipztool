@@ -75,7 +75,7 @@
     if (opts.error) root.appendChild(el('p', 'auth-msg err', opts.error));
     if (!clerk) { root.appendChild(el('p', 'auth-msg err', 'Sign-in is unavailable right now. Reload the page and try again.')); return; }
     /* The query string makes this a real page load after sign-in. A hash-only change would not reload, and Clerk then skips telling the page that the session is active. */
-    var dest = location.origin + (opts.path || '/tools.html') + '?signed-in=1';
+    var dest = location.origin + (opts.path || '/tools.html') + '?signed-in=1' + (opts.next ? '#' + opts.next : '');
     store('clipz_next', opts.next || null);
     var tabs = el('div', 'auth-tabs'), bIn = el('button', null, 'Sign in'), bUp = el('button', null, 'Create account');
     bIn.type = 'button'; bUp.type = 'button';
