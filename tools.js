@@ -325,6 +325,7 @@
   function lastLog() { var l = logBuf.filter(function (x) { return /error|invalid|unable|no such/i.test(x); }).pop(); return l ? "(" + l.trim() + ")" : "Try an MP4 or MOV file."; }
 
   function showResult(blob, spec, t) {
+    if (window.ClipzNotify) ClipzNotify("tool_run", { tool: cur });
     resultUrl = URL.createObjectURL(blob);
     var base = files[0].name.replace(/\.[^.]+$/, "") + "-" + cur;
     var fname = base + "." + spec.out.split(".").pop();

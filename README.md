@@ -51,3 +51,12 @@ Page views are counted with Vercel Web Analytics using the `@vercel/analytics` n
 - It is cookie-free and does not run on localhost.
 - To update: `npm update @vercel/analytics`, then copy `node_modules/@vercel/analytics/dist/index.mjs` over `vendor/vercel-analytics/index.js`.
 - `window.ClipzTrack(name, data)` sends a custom event once analytics has loaded.
+
+## Usage alerts (Telegram)
+
+`notify.js` reports anonymous usage to `/api/notify` (`api/notify.js`, a Vercel serverless function), which sends a short message to the owner through a Telegram bot. The bot token never reaches the browser.
+
+- Events: new visit (once per session, silent), tool run, sign-in, new account, sponsor click.
+- Alerts contain the page, device type and country. Never emails, IP addresses or file names.
+- Vercel environment variables: `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`. Optional: `NOTIFY_VISITS=off` to stop new-visit alerts, `ALLOWED_ORIGINS` for a custom domain.
+- Env changes take effect on the next deploy. Rotate the token with `/revoke` in @BotFather, then update the variable.

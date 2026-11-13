@@ -67,6 +67,7 @@ const footer = `<footer>
 </footer>
 
 <script src="/analytics.js"></script>
+<script src="/notify.js"></script>
 <script src="/auth.js"></script>
 `;
 

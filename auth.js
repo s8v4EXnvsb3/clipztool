@@ -7,6 +7,7 @@
   var FRONTEND_API = atob(PUBLISHABLE_KEY.split("_")[2]).replace(/\$$/, "");
 
   var clerk = null, user = null, listeners = [], mounted = null;
+  var JUST_SIGNED_IN = /[?&]signed-in=1/.test(location.search); // read before the query string is removed
 
   function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
   function store(k, v) { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} }
@@ -53,6 +54,10 @@
   }).then(function () {
     clerk = window.Clerk;
     user = toUser(clerk.user);
+    if (JUST_SIGNED_IN && user && window.ClipzNotify) {
+      var made = clerk.user && clerk.user.createdAt ? new Date(clerk.user.createdAt).getTime() : 0;
+      window.ClipzNotify(Date.now() - made < 10 * 60 * 1000 ? 'new_account' : 'signin');
+    }
     clerk.addListener(function (r) {
       var was = !!user;
       user = toUser(r.user);
