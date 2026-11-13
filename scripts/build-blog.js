@@ -66,6 +66,7 @@ const footer = `<footer>
   <p class="dim">Clipztool is independent and is not affiliated with any tool listed. Links to other sites open the official pages. <a href="/contact.html">Sponsor or contact</a></p>
 </footer>
 
+<script src="/analytics.js"></script>
 <script src="/auth.js"></script>
 `;
 

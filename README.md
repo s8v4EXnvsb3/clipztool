@@ -42,3 +42,7 @@ The built-in editor needs an account. Sign-in uses Clerk with email links (no pa
 - Guides live in `blog/`. They are generated: edit `scripts/posts.js`, then run `node scripts/build-blog.js`. It also rewrites `sitemap.xml` and `robots.txt`.
 - Keep `scripts/posts.js` and the `TOOLS` list in `app.js` in step when you add or remove a tool.
 - The Sponsors strip above the bin is driven by `sponsors.js`. Add an entry to `SPONSORS` to show a sponsor; empty slots link to `contact.html`.
+
+## Analytics
+
+Page views are counted with Vercel Web Analytics through `analytics.js` (the Next.js package `@vercel/analytics/next` does not apply to a static site). It only works after Web Analytics is enabled for the project in the Vercel dashboard: Project, Analytics tab, Enable. It is cookie-free and does not run on localhost.
