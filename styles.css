@@ -108,3 +108,56 @@ footer p{margin:0 0 6px}
   .clip{font-size:12px;padding:0 7px}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.clip{transition:none}}
+
+/* editor page */
+.top nav a[aria-current="page"]{color:var(--fg)}
+.editor{padding-block:24px 56px}
+.ed-head{margin-bottom:32px}
+.h-ed{font-size:clamp(32px,5vw,56px);line-height:1;font-weight:850;font-stretch:116%;letter-spacing:-.025em}
+.ws{display:grid;grid-template-columns:230px 1fr;gap:28px;align-items:start}
+.toolnav{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--panel)}
+.tn{padding:12px 16px;text-decoration:none;font-size:15px;color:var(--dim);border-bottom:1px solid var(--line);border-left:3px solid transparent}
+.tn:last-child{border-bottom:0}
+.tn:hover{color:var(--fg)}
+.tn[aria-current="page"]{color:var(--fg);font-weight:600;border-left-color:var(--edit);background:rgba(255,255,255,.03)}
+.panel{min-width:0;border:1px solid var(--line);border-radius:6px;background:var(--panel);padding:24px;display:flex;flex-direction:column;gap:16px}
+.panel h2{font-size:26px}
+.panel p{margin:0}
+.drop{display:flex;flex-direction:column;align-items:center;gap:6px;padding:28px 16px;border:1.5px dashed #3a4350;border-radius:6px;cursor:pointer;text-align:center}
+.drop:hover,.drop.over{border-color:var(--edit);background:rgba(227,176,75,.05)}
+.drop:focus-within{outline:2px solid var(--captions);outline-offset:3px}
+.drop input{position:absolute;width:1px;height:1px;opacity:0}
+.drop #drop-text{font-weight:600}
+.files{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.files li{display:flex;gap:12px;align-items:center;padding:8px 12px;background:var(--bg);border:1px solid var(--line);border-radius:4px}
+.fname{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mini{font:600 14px var(--font);width:30px;height:30px;color:var(--fg);background:transparent;border:1px solid var(--line);border-radius:4px;cursor:pointer}
+.mini:hover{border-color:var(--fg)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field label{font:500 12px var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--dim)}
+.field input,.field select{font:inherit;font-size:15px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:9px 12px;width:100%}
+.row-act{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.btn{display:inline-block;font:700 15px var(--font);background:var(--edit);color:#16130a;border:0;border-radius:6px;padding:11px 22px;cursor:pointer;text-decoration:none}
+.btn:hover:not(:disabled){filter:brightness(1.08)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+progress{flex:1;min-width:140px;height:8px;accent-color:var(--edit)}
+.status{min-height:1.5em;color:var(--dim);font-size:14px}
+.status.err{color:#ff9d9d}
+.status.ok{color:var(--generate)}
+.result{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.result video,.result img{max-width:100%;max-height:420px;border-radius:4px;background:#000}
+.result audio{width:100%}
+.note-small{font-size:13px;margin-top:20px;max-width:75ch}
+@media (max-width:800px){
+  .ws{grid-template-columns:1fr}
+  .toolnav{flex-direction:row;overflow-x:auto}
+  .tn{white-space:nowrap;border-bottom:0;border-right:1px solid var(--line);border-left:0;border-bottom:3px solid transparent}
+  .tn[aria-current="page"]{border-bottom-color:var(--edit);border-left-color:transparent}
+  .panel{padding:18px}
+}
+.cta{display:inline-block;margin-top:24px;font:700 15px var(--font);background:var(--edit);color:#16130a;border-radius:6px;padding:12px 22px;text-decoration:none}
+.cta:hover{filter:brightness(1.08)}
+.chip[data-k="builtin"]{--c:var(--edit)}
+.badge{font:500 10px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:#16130a;background:var(--edit);border-radius:3px;padding:1px 6px;margin-left:8px;vertical-align:middle}
+@media (min-width:901px){dl{grid-template-columns:repeat(5,1fr);gap:22px}}

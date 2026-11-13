@@ -9,6 +9,15 @@
 
   // name, jobs, free access, description, url
   var TOOLS = [
+    ["Trim video", ["edit"], "Built in", "Cut a clip down to the part you want. Runs in your browser.", "tools.html#trim", true],
+    ["Video to GIF", ["edit"], "Built in", "Turn a few seconds of video into an animated GIF.", "tools.html#gif", true],
+    ["Extract audio", ["edit"], "Built in", "Save the sound from a video as an MP3.", "tools.html#audio", true],
+    ["Compress video", ["edit"], "Built in", "Shrink a video so it is easy to send or upload.", "tools.html#compress", true],
+    ["Resize for Shorts and Reels", ["edit"], "Built in", "Change a video to 9:16, 4:5, square or wide.", "tools.html#resize", true],
+    ["Speed and reverse", ["edit"], "Built in", "Slow motion, fast forward or play backwards.", "tools.html#speed", true],
+    ["Merge clips", ["edit"], "Built in", "Join two or more videos into one.", "tools.html#merge", true],
+    ["Add text watermark", ["edit"], "Built in", "Put your name or handle on a video.", "tools.html#watermark", true],
+
     ["Luma Dream Machine", ["generate"], "Credits", "Turns a text prompt or a still image into a short clip.", "https://lumalabs.ai/dream-machine"],
     ["Runway", ["generate", "edit"], "Credits", "Text and image to video, plus green screen and object removal. Free credits are limited.", "https://runwayml.com"],
     ["Pika", ["generate"], "Credits", "Short clips from text or images, with effects that animate objects in a photo.", "https://pika.art"],
@@ -96,8 +105,9 @@
 
   /* bin */
   var chips = $("chips"), rows = $("rows"), empty = $("empty");
+  function match(t, key) { return key === "all" || (key === "builtin" ? t[2] === "Built in" : t[1].indexOf(key) > -1); }
   function chip(key, label, color) {
-    var count = TOOLS.filter(function (t) { return key === "all" || t[1].indexOf(key) > -1; }).length;
+    var count = TOOLS.filter(function (t) { return match(t, key); }).length;
     var b = document.createElement("button");
     b.type = "button";
     b.className = "chip";
@@ -109,6 +119,7 @@
   }
   chip("all", "All");
   Object.keys(JOBS).forEach(function (k) { chip(k, JOBS[k].label, JOBS[k].color); });
+  chip("builtin", "Built in", "var(--edit)");
 
   function setJob(k, scroll) {
     state.job = k;
@@ -122,7 +133,7 @@
     rows.textContent = "";
     var n = 0;
     TOOLS.forEach(function (t) {
-      if (state.job !== "all" && t[1].indexOf(state.job) < 0) return;
+      if (!match(t, state.job)) return;
       var hay = (t[0] + " " + t[3] + " " + t[1].join(" ") + " " + t[2]).toLowerCase();
       if (state.q && hay.indexOf(state.q) < 0) return;
       n++;
@@ -131,8 +142,10 @@
       var name = document.createElement("span");
       name.className = "name";
       var a = document.createElement("a");
-      a.href = t[4]; a.target = "_blank"; a.rel = "noopener noreferrer"; a.textContent = t[0];
+      a.href = t[4]; a.textContent = t[0];
+      if (!t[5]) { a.target = "_blank"; a.rel = "noopener noreferrer"; }
       name.appendChild(a);
+      if (t[5]) { var bd = document.createElement("span"); bd.className = "badge"; bd.textContent = "On this site"; name.appendChild(bd); }
       var jobs = document.createElement("span");
       jobs.className = "jobs";
       t[1].forEach(function (j) {
@@ -148,8 +161,9 @@
       var d = document.createElement("p");
       d.className = "desc"; d.textContent = t[3];
       var o = document.createElement("a");
-      o.className = "open"; o.href = t[4]; o.target = "_blank"; o.rel = "noopener noreferrer";
-      o.textContent = "Open ↗";
+      o.className = "open"; o.href = t[4];
+      if (!t[5]) { o.target = "_blank"; o.rel = "noopener noreferrer"; }
+      o.textContent = t[5] ? "Use →" : "Open ↗";
       o.setAttribute("aria-label", "Open " + t[0]);
       [name, jobs, acc, d, o].forEach(function (x) { li.appendChild(x); });
       rows.appendChild(li);
