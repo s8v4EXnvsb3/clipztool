@@ -5,6 +5,7 @@
   --fg:#ecebe8; --body:#b9b8b3; --dim:#85847f;
   --generate:#5fc0ae; --edit:#d9a441; --captions:#86a3e0; --voice:#d9829b; --avatar:#a996e0;
   --font:"Archivo",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --orange:#ff7a1a; --orange-hi:#ff9440;
   --label:84px; --r:2px;
   color-scheme:dark;
 }
@@ -192,3 +193,72 @@ progress{flex:1;min-width:140px;height:6px;accent-color:var(--fg)}
   .gate{padding:22px}
 }
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.clip{transition:none}}
+
+/* sponsors (the one place orange is used) */
+.btn-orange{display:inline-block;font:700 15px/1 var(--font);background:var(--orange);color:#0a0a0a;border:1px solid var(--orange);border-radius:var(--r);padding:13px 22px;text-decoration:none;cursor:pointer;white-space:nowrap}
+.btn-orange:hover{background:var(--orange-hi);border-color:var(--orange-hi)}
+.sponsors{padding-block:32px 40px;border-top:1px solid var(--line)}
+.sp-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.sp-head h2{font-size:clamp(26px,3.4vw,34px)}
+.sp-head p{margin:6px 0 0}
+.sp-actions{display:flex;align-items:center;gap:14px}
+.ad-tag{border:1px solid var(--line-2);color:var(--dim);border-radius:1px;padding:2px 8px;text-transform:uppercase;letter-spacing:.08em}
+.sp-grid{list-style:none;margin:22px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.sp-card{display:flex;flex-direction:column;gap:6px;min-height:132px;padding:20px;border:1px dashed var(--line-2);border-radius:var(--r);text-decoration:none;background:var(--panel)}
+.sp-card:hover{border-color:var(--orange)}
+.sp-card.sponsor{border-style:solid}
+.sp-n{color:var(--dim)}
+.sp-card strong{font-size:20px;font-weight:700;font-stretch:106%}
+.sp-card span:last-child{color:var(--body);font-size:15px}
+
+/* guides link in the bin */
+.guide{color:var(--dim);font-size:13px;white-space:nowrap}
+.guide:hover{color:var(--fg)}
+
+/* blog and article pages */
+.article-wrap{max-width:760px;margin:0 auto;padding-block:32px 64px}
+.article-wrap.wide{max-width:1120px}
+.crumbs{color:var(--dim);margin-bottom:24px}
+.crumbs a{text-decoration:none}
+.crumbs a:hover{color:var(--fg);text-decoration:underline}
+.post-head{margin-bottom:28px}
+.post-meta{display:flex;gap:14px;flex-wrap:wrap;align-items:center;color:var(--dim);margin:0 0 14px}
+.h-post{font-size:clamp(30px,5vw,48px);line-height:1.05;font-weight:850;font-stretch:112%;letter-spacing:-.02em}
+.post h2{font-size:24px;margin:38px 0 12px}
+.post p,.post li{color:var(--body);font-size:17px;line-height:1.7}
+.post ul,.post ol{padding-left:22px;margin:0;display:flex;flex-direction:column;gap:8px}
+.callout{margin-top:44px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--panel);padding:28px}
+.callout h2{margin:0 0 8px;font-size:24px}
+.callout p{margin:0 0 18px}
+.callout .eyebrow{margin-bottom:8px}
+.related{margin-top:56px;padding-top:32px;border-top:1px solid var(--line)}
+.related h2{font-size:26px;margin-bottom:8px}
+.post-list{list-style:none;margin:0;padding:0}
+.post-row{padding:20px 0;border-bottom:1px solid var(--line)}
+.post-row[hidden]{display:none}
+.post-row>a{display:block;text-decoration:none}
+.post-row h3{font-size:20px;font-weight:700;font-stretch:106%}
+.post-row>a:hover h3{text-decoration:underline;text-underline-offset:4px}
+.post-row p{margin:4px 0 0;color:var(--body);font-size:15px}
+.post-row .post-meta{margin:10px 0 0}
+.article-wrap.wide .post-list{margin-top:8px}
+
+/* contact page */
+.contact .lede{margin-bottom:32px}
+.contact-card{border:1px solid var(--line-2);border-radius:var(--r);background:var(--panel);padding:28px;margin-bottom:36px}
+.contact-card h2{font-size:28px;margin-bottom:6px}
+.contact-card p{margin:0}
+.mail{font-size:clamp(16px,4.6vw,24px);margin:18px 0 20px!important;color:var(--fg);overflow-wrap:anywhere;user-select:all}
+.contact-info h2{font-size:22px;margin:28px 0 10px}
+.contact-info ul{margin:0;padding-left:22px;color:var(--body);line-height:1.8}
+@media (max-width:560px){.sp-actions{width:100%;justify-content:space-between}.callout,.contact-card{padding:20px}}
+
+/* keep small mono labels small inside article and list text */
+.post-row p.post-meta,.post p.post-meta,.post p.eyebrow{font-family:var(--mono);font-size:12px;line-height:1.4}
+
+/* phone header: keep all links and Sign in on one row */
+@media (max-width:560px){
+  .top nav{gap:6px 14px;font-size:13px}
+  .auth-slot{margin-left:auto;min-width:0}
+  .signin,.signout{padding:8px 13px;font-size:13px}
+}

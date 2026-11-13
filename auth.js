@@ -83,7 +83,7 @@
     if (box) {
       var g = document.getElementById("gate"); if (g) g.scrollIntoView({ behavior: "smooth", block: "center" });
       var i = box.querySelector("input"); if (i) i.focus({ preventScroll: true });
-    } else location.href = "tools.html" + (next ? "#" + next : "");
+    } else location.href = "/tools.html" + (next ? "#" + next : "");
   }
 
   /* ---- header widget ---- */

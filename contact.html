@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sponsor Clipztool · Contact</title>
+<meta name="description" content="Sponsor Clipztool and reach people who use free video tools every day. Email to get in touch.">
+<link rel="canonical" href="https://clipztool.vercel.app/contact.html">
+<meta name="theme-color" content="#0a0a0a">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="top">
+  <a class="mark" href="/" aria-label="Clipztool home"><span class="mark-clip" aria-hidden="true"></span>Clipztool</a>
+  <nav aria-label="Main">
+    <a href="/tools.html">Editor</a>
+    <a href="/#tools">The bin</a>
+    <a href="/blog/">Blog</a>
+    <a href="/#free">How free is free</a>
+    <span id="auth-slot" class="auth-slot"></span>
+  </nav>
+</header>
+
+<main class="article-wrap contact">
+  <p class="eyebrow mono">Contact</p>
+  <h1 class="h-ed">Sponsor Clipztool.</h1>
+  <p class="lede">Clipztool is a free directory of video tools with a set of editors that run in the browser. Sponsors help keep it free. Your brand appears in the Sponsors strip above the bin on the home page, labelled as an ad.</p>
+
+  <section class="contact-card" aria-labelledby="mail-h">
+    <h2 id="mail-h">Contact me</h2>
+    <p class="dim">Send a short email and I will reply with the details.</p>
+    <p class="mail mono" id="mail">s8v4EXnvsb3@proton.me</p>
+    <div class="row-act">
+      <a class="btn-orange" id="mailto" href="mailto:s8v4EXnvsb3@proton.me?subject=Clipztool%20sponsorship">Email me</a>
+      <button class="btn alt" id="copy" type="button">Copy address</button>
+      <span class="status" id="copy-status" role="status" aria-live="polite"></span>
+    </div>
+  </section>
+
+  <section class="contact-info">
+    <h2>What to include</h2>
+    <ul>
+      <li>Your brand name and website</li>
+      <li>What you would like to promote</li>
+      <li>When you would like it to run</li>
+    </ul>
+    <h2>How sponsoring works</h2>
+    <ul>
+      <li>Sponsor placements are clearly labelled as ads.</li>
+      <li>The tools in the bin are chosen by us. A sponsorship does not buy a place in the list.</li>
+      <li>Sponsor links are marked as sponsored.</li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  <p>Clipztool is independent and is not affiliated with any tool listed.</p>
+</footer>
+
+<script src="vendor/supabase/supabase.js"></script>
+<script src="auth.js"></script>
+<script>
+(function () {
+  var btn = document.getElementById("copy"), st = document.getElementById("copy-status"), mail = document.getElementById("mail");
+  function done(m) { st.textContent = m; setTimeout(function () { st.textContent = ""; }, 2200); }
+  function select() { var r = document.createRange(); r.selectNodeContents(mail); var g = getSelection(); g.removeAllRanges(); g.addRange(r); done("Selected. Press Ctrl+C to copy."); }
+  btn.addEventListener("click", function () {
+    try { navigator.clipboard.writeText(mail.textContent.trim()).then(function () { done("Copied"); }, select); } catch (e) { select(); }
+  });
+})();
+</script>
+</body>
+</html>

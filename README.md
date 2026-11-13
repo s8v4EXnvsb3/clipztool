@@ -35,3 +35,9 @@ The built-in editor needs an account. Sign-in is passwordless: visitors enter th
 - Auth settings (Site URL, allowed redirect URLs) live in the Supabase project. If the domain changes, update both in the Supabase dashboard under Authentication, URL Configuration.
 - The gate is client-side. The tools run in the visitor's browser, so it controls the user experience but cannot technically stop a determined person from using the files directly.
 - Supabase's built-in email sender is limited to a few emails per hour. Before a real launch, add a custom SMTP provider in the Supabase dashboard under Authentication, Emails.
+
+## Blog and sponsors
+
+- Guides live in `blog/`. They are generated: edit `scripts/posts.js`, then run `node scripts/build-blog.js`. It also rewrites `sitemap.xml` and `robots.txt`.
+- Keep `scripts/posts.js` and the `TOOLS` list in `app.js` in step when you add or remove a tool.
+- The Sponsors strip above the bin is driven by `sponsors.js`. Add an entry to `SPONSORS` to show a sponsor; empty slots link to `contact.html`.

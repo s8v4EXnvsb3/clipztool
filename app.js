@@ -50,6 +50,31 @@
     avatar: [[18, 36, "Talking presenter"]]
   };
 
+  function slugify(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
+
+  /* Sponsors: render real sponsors first, then open slots that link to the contact page. */
+  (function () {
+    var list = window.SPONSORS || [], grid = document.getElementById("sp-grid");
+    if (!grid || !list.length) return;
+    grid.textContent = "";
+    var contact = window.SPONSOR_CONTACT || "contact.html", total = Math.max(window.SPONSOR_SLOTS || 3, list.length), i;
+    function num(n) { var s = document.createElement("span"); s.className = "sp-n mono"; s.textContent = ("0" + n).slice(-2); return s; }
+    for (i = 0; i < list.length; i++) {
+      var s = list[i], li = document.createElement("li"), a = document.createElement("a");
+      a.className = "sp-card sponsor"; a.href = s.url; a.target = "_blank"; a.rel = "sponsored noopener noreferrer";
+      var b = document.createElement("strong"); b.textContent = s.name;
+      var t = document.createElement("span"); t.textContent = s.tagline || "";
+      a.appendChild(num(i + 1)); a.appendChild(b); a.appendChild(t); li.appendChild(a); grid.appendChild(li);
+    }
+    for (; i < total; i++) {
+      var li2 = document.createElement("li"), a2 = document.createElement("a");
+      a2.className = "sp-card"; a2.href = contact;
+      var b2 = document.createElement("strong"); b2.textContent = "Your brand here";
+      var t2 = document.createElement("span"); t2.textContent = "Reach people who use free tools every day";
+      a2.appendChild(num(i + 1)); a2.appendChild(b2); a2.appendChild(t2); li2.appendChild(a2); grid.appendChild(li2);
+    }
+  })();
+
   var state = { job: "all", q: "" };
   var $ = function (id) { return document.getElementById(id); };
 
@@ -158,7 +183,10 @@
       var acc = document.createElement("span");
       acc.className = "acc"; acc.textContent = t[2];
       var d = document.createElement("p");
-      d.className = "desc"; d.textContent = t[3];
+      d.className = "desc"; d.textContent = t[3] + " ";
+      var gd = document.createElement("a");
+      gd.className = "guide"; gd.href = "blog/" + slugify(t[0]) + ".html"; gd.textContent = "Read the guide";
+      d.appendChild(gd);
       var o = document.createElement("a");
       o.className = "open"; o.href = t[4];
       if (!t[5]) { o.target = "_blank"; o.rel = "noopener noreferrer"; }

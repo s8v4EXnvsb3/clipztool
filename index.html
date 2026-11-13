@@ -22,6 +22,7 @@
   <nav aria-label="Main">
     <a href="tools.html">Editor</a>
     <a href="#tools">The bin</a>
+    <a href="blog/">Blog</a>
     <a href="#free">How free is free</a>
     <span id="auth-slot" class="auth-slot"></span>
   </nav>
@@ -45,6 +46,22 @@
       </div>
     </div>
     <p class="hint mono">Select a clip to filter the list below.</p>
+  </section>
+
+  <section class="sponsors" id="sponsors" aria-labelledby="sp-h">
+    <div class="sp-head">
+      <div>
+        <h2 id="sp-h">Sponsors</h2>
+        <p class="dim">Sponsors help keep Clipztool free.</p>
+      </div>
+      <div class="sp-actions">
+        <span class="ad-tag mono">Ad</span>
+        <a class="btn-orange" href="contact.html">Become a sponsor</a>
+      </div>
+    </div>
+    <ul class="sp-grid" id="sp-grid">
+      <li><a class="sp-card" href="contact.html"><span class="sp-n mono">01</span><strong>Your brand here</strong><span>Reach people who use free tools every day</span></a></li>
+    </ul>
   </section>
 
   <section class="bin" id="tools" aria-labelledby="bin-h">
@@ -76,11 +93,12 @@
 
 <footer>
   <p>Plans, prices and limits change often. Check each site before you build a project around it.</p>
-  <p class="dim">Clipztool is independent and is not affiliated with any tool listed. Links open the official sites.</p>
+  <p class="dim">Clipztool is independent and is not affiliated with any tool listed. Links open the official sites. <a href="contact.html">Sponsor or contact</a></p>
 </footer>
 
 <script src="vendor/supabase/supabase.js"></script>
 <script src="auth.js"></script>
+<script src="sponsors.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
