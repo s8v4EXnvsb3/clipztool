@@ -103,6 +103,21 @@
     })(t0);
   }
 
+  /* Built-in tools need an account: send signed-out visitors to the sign-in dialog first. */
+  function gate(a, key, what) {
+    a.addEventListener("click", function (e) {
+      if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || !window.ClipzAuth) return;
+      e.preventDefault();
+      ClipzAuth.ready.then(function () {
+        if (ClipzAuth.user()) location.href = a.href;
+        else ClipzAuth.requireLogin({ path: "/tools.html", next: key, message: "Create a free account to use " + what + ". Enter your email and we will send you a sign-in link." });
+      });
+    });
+  }
+  var cta = document.querySelector(".cta");
+  if (cta) gate(cta, "trim", "the editor");
+  if (window.ClipzAuth && ClipzAuth.urlError()) ClipzAuth.ready.then(function () { ClipzAuth.requireLogin({ path: "/" }); });
+
   /* bin */
   var chips = $("chips"), rows = $("rows"), empty = $("empty");
   function match(t, key) { return key === "all" || (key === "builtin" ? t[2] === "Built in" : t[1].indexOf(key) > -1); }
@@ -143,7 +158,7 @@
       name.className = "name";
       var a = document.createElement("a");
       a.href = t[4]; a.textContent = t[0];
-      if (!t[5]) { a.target = "_blank"; a.rel = "noopener noreferrer"; }
+      if (!t[5]) { a.target = "_blank"; a.rel = "noopener noreferrer"; } else gate(a, t[4].split("#")[1], t[0].toLowerCase());
       name.appendChild(a);
       if (t[5]) { var bd = document.createElement("span"); bd.className = "badge"; bd.textContent = "On this site"; name.appendChild(bd); }
       var jobs = document.createElement("span");
@@ -164,6 +179,7 @@
       o.className = "open"; o.href = t[4];
       if (!t[5]) { o.target = "_blank"; o.rel = "noopener noreferrer"; }
       o.textContent = t[5] ? "Use →" : "Open ↗";
+      if (t[5]) gate(o, t[4].split("#")[1], t[0].toLowerCase());
       o.setAttribute("aria-label", "Open " + t[0]);
       [name, jobs, acc, d, o].forEach(function (x) { li.appendChild(x); });
       rows.appendChild(li);

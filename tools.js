@@ -266,7 +266,7 @@
     renderOpts(t.defaults && durations[0] ? t.defaults(durations[0]) : null);
     clearResult(); say(""); renderFiles();
   }
-  window.addEventListener("hashchange", function () { if (!busy) select(location.hash.slice(1)); });
+  window.addEventListener("hashchange", function () { var k = location.hash.slice(1); if (!busy && TOOLS[k]) select(k); });
 
   input.addEventListener("change", function () { addFiles(input.files); input.value = ""; });
   var drop = $("drop");
@@ -278,6 +278,7 @@
 
   function run() {
     if (busy || !files.length) return;
+    if (!ClipzAuth.user()) { ClipzAuth.requireLogin({ path: "/tools.html", next: cur, message: "Your session ended. Sign in again to continue." }); return; }
     var t = TOOLS[cur], opts = readOpts(), names = [], outName = null, spec;
     clearResult(); setBusy(true); bar.hidden = false; bar.value = 0;
     say(ff ? "Reading your video..." : "Loading the video engine (about 25 MB, first time only)...");
@@ -340,7 +341,30 @@
   }
 
   runBtn.addEventListener("click", run);
-  select(location.hash.slice(1));
+
+  /* Show the editor only to signed-in users. */
+  function toolFromUrl() {
+    var h = location.hash.slice(1);
+    if (TOOLS[h]) return h;
+    var nx = null;
+    try { nx = localStorage.getItem("clipz_next"); localStorage.removeItem("clipz_next"); } catch (e) {}
+    return nx && TOOLS[nx] ? nx : "trim";
+  }
+  var signedIn = false;
+  function showFor(u) { signedIn = !!u; $("gate").hidden = !!u; $("app").hidden = !u; }
+  select("trim");
+  ClipzAuth.ready.then(function () {
+    var u = ClipzAuth.user();
+    showFor(u);
+    var k = toolFromUrl(); select(k);
+    if (location.hash !== "#" + k) history.replaceState(null, "", "#" + k);
+    if (!u) ClipzAuth.mountForm($("gate-form"), { path: "/tools.html", next: k, error: ClipzAuth.urlError() });
+  });
+  ClipzAuth.onChange(function (u) {
+    var was = signedIn;
+    showFor(u);
+    if (!u && was) ClipzAuth.mountForm($("gate-form"), { path: "/tools.html", next: cur });
+  });
 
   window.__clipz = { engine: engine, TOOLS: TOOLS };
 })();

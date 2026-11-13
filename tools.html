@@ -19,6 +19,7 @@
   <nav aria-label="Main">
     <a href="./#tools">The bin</a>
     <a href="tools.html" aria-current="page">Editor</a>
+    <span id="auth-slot" class="auth-slot"></span>
   </nav>
 </header>
 
@@ -26,9 +27,16 @@
   <div class="ed-head">
     <p class="eyebrow mono">8 tools · runs on your device</p>
     <h1 class="h-ed">Edit video in your browser.</h1>
-    <p class="lede small">Pick a tool, add a video and press Run. Your video is processed on this computer and is never uploaded anywhere.</p>
+    <p class="lede small">Pick a tool, add a video and press Run. Sign in with your email, then your video is processed on this computer and never uploaded anywhere.</p>
   </div>
 
+  <section class="gate" id="gate" hidden aria-labelledby="gate-h">
+    <h2 id="gate-h">Create a free account to use the editor</h2>
+    <p class="dim">Enter your email and we will send you a sign-in link. There is no password, and the same link creates your account the first time.</p>
+    <div id="gate-form"></div>
+  </section>
+
+  <div id="app" hidden>
   <div class="ws">
     <nav class="toolnav" id="toolnav" aria-label="Editing tools"></nav>
 
@@ -54,13 +62,17 @@
     </section>
   </div>
 
+  </div>
+
   <p class="note-small dim">The first run downloads the video engine, about 25 MB, then it is cached. Long or very large videos can be slow or run out of memory, especially on phones. These tools use ffmpeg running in WebAssembly.</p>
 </main>
 
 <footer>
-  <p>Clipztool is independent and free. Nothing you add here leaves your device.</p>
+  <p>Clipztool is independent and free. Your videos never leave your device. We only keep the email address you sign in with.</p>
 </footer>
 
+<script src="vendor/supabase/supabase.js"></script>
+<script src="auth.js"></script>
 <script src="vendor/ffmpeg/ffmpeg.js"></script>
 <script src="tools.js"></script>
 </body>

@@ -22,6 +22,7 @@
   <nav aria-label="Main">
     <a href="tools.html">Editor</a>
     <a href="#tools">The bin</a>
+    <span id="auth-slot" class="auth-slot"></span>
     <a href="#free">How free is free</a>
   </nav>
 </header>
@@ -30,7 +31,7 @@
   <section class="hero">
     <p class="eyebrow mono">5 jobs · 17 free AI tools · 8 built-in editors</p>
     <h1>Pick the job.<br>Find a free tool for it.</h1>
-    <p class="lede">Clipztool is a short, hand-sorted list of video tools that cost nothing to start with. Each one has a free plan, free credits or an open-source license. Pick what you are trying to make and go straight to the site. Eight simple editors also run right here in your browser, with no sign-up and no upload.</p>
+    <p class="lede">Clipztool is a short, hand-sorted list of video tools that cost nothing to start with. Each one has a free plan, free credits or an open-source license. Pick what you are trying to make and go straight to the site. Eight simple editors also run right here in your browser. Sign in with your email, no password needed. Your video is never uploaded.</p>
     <a class="cta" href="tools.html">Open the editor</a>
 
     <div class="timeline" id="timeline" aria-label="Video timeline showing the five jobs. Select a clip to filter the list.">
@@ -78,6 +79,8 @@
   <p class="dim">Clipztool is independent and is not affiliated with any tool listed. Links open the official sites.</p>
 </footer>
 
+<script src="vendor/supabase/supabase.js"></script>
+<script src="auth.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
