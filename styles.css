@@ -83,7 +83,7 @@ input[type=search]::placeholder{color:var(--dim)}
 .chip em{font-style:normal;color:var(--dim);font-family:var(--mono);font-size:11px}
 .chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
 .chip[aria-pressed="true"] em{color:#555}
-.cols,.row{display:grid;grid-template-columns:1.2fr .8fr .9fr 2.6fr 90px;gap:20px;align-items:baseline}
+.cols,.row{display:grid;grid-template-columns:1.7fr .7fr .9fr 2.3fr 84px;gap:20px;align-items:baseline}
 .cols{padding:0 4px 8px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;border-bottom:1px solid var(--line-2);font-size:11px}
 .rows{list-style:none;margin:0;padding:0}
 .row{padding:16px 4px;border-bottom:1px solid var(--line)}
@@ -273,3 +273,30 @@ progress{flex:1;min-width:140px;height:6px;accent-color:var(--fg)}
 
 /* hide Clerk's own title on the first screens only (the page already has a heading); keep it on later steps such as "Check your email" */
 #gate-form .cl-signIn-start .cl-header,#gate-form .cl-signUp-start .cl-header{display:none}
+
+/* landing page: right-hand sidebar listing the free tools */
+.home-grid{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:40px;align-items:start}
+.home-main{grid-column:1;grid-row:1;min-width:0}
+.home-side{grid-column:2;grid-row:1;position:sticky;top:16px;padding-top:34px}
+.side-h{margin:0 0 10px;display:flex;justify-content:space-between;color:var(--dim);text-transform:uppercase;letter-spacing:.1em}
+.side-note{margin:12px 0 0;font-size:12px;line-height:1.5;color:var(--dim)}
+.home-side .tn{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.tn-out{font-size:11px;color:var(--dim);letter-spacing:.05em}
+.home-side .tn:hover .tn-out{color:var(--body)}
+
+/* let the bin switch to its compact rows based on its own width (it is narrower beside the sidebar) */
+.bin{container:bin / inline-size}
+@container bin (max-width:780px){
+  .cols{display:none}
+  .row{grid-template-columns:1fr auto;gap:6px 16px;padding:18px 4px}
+  .row .jobs,.row .acc{grid-column:1}
+  .row .desc{grid-column:1 / -1}
+  .row .open{grid-row:1;grid-column:2}
+}
+
+@media (max-width:900px){
+  .home-grid{grid-template-columns:minmax(0,1fr);gap:0}
+  .home-side{grid-column:1;grid-row:1;position:static;padding-top:28px;min-width:0}
+  .home-main{grid-column:1;grid-row:2}
+  .side-note,.tn-out{display:none}
+}

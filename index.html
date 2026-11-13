@@ -48,35 +48,54 @@
     <p class="hint mono">Select a clip to filter the list below.</p>
   </section>
 
-  <section class="sponsors" id="sponsors" aria-labelledby="sp-h">
-    <div class="sp-head">
-      <div>
-        <h2 id="sp-h">Sponsors</h2>
-        <p class="dim">Sponsors help keep Clipztool free.</p>
-      </div>
-      <div class="sp-actions">
-        <span class="ad-tag mono">Ad</span>
-        <a class="btn-orange" href="contact.html">Become a sponsor</a>
-      </div>
-    </div>
-    <ul class="sp-grid" id="sp-grid">
-      <li><a class="sp-card" href="contact.html"><span class="sp-n mono">01</span><strong>Your brand here</strong><span>Reach people who use free tools every day</span></a></li>
-    </ul>
-  </section>
+  <div class="home-grid">
+    <div class="home-main">
+      <section class="sponsors" id="sponsors" aria-labelledby="sp-h">
+        <div class="sp-head">
+          <div>
+            <h2 id="sp-h">Sponsors</h2>
+            <p class="dim">Sponsors help keep Clipztool free.</p>
+          </div>
+          <div class="sp-actions">
+            <span class="ad-tag mono">Ad</span>
+            <a class="btn-orange" href="contact.html">Become a sponsor</a>
+          </div>
+        </div>
+        <ul class="sp-grid" id="sp-grid">
+          <li><a class="sp-card" href="contact.html"><span class="sp-n mono">01</span><strong>Your brand here</strong><span>Reach people who use free tools every day</span></a></li>
+        </ul>
+      </section>
 
-  <section class="bin" id="tools" aria-labelledby="bin-h">
-    <div class="bin-head">
-      <h2 id="bin-h">The bin</h2>
-      <div class="controls">
-        <label class="sr" for="q">Search tools</label>
-        <input id="q" type="search" placeholder="Search by name or task" autocomplete="off">
-      </div>
+      <section class="bin" id="tools" aria-labelledby="bin-h">
+        <div class="bin-head">
+          <h2 id="bin-h">The bin</h2>
+          <div class="controls">
+            <label class="sr" for="q">Search tools</label>
+            <input id="q" type="search" placeholder="Search by name or task" autocomplete="off">
+          </div>
+        </div>
+        <div class="chips" id="chips" role="group" aria-label="Filter by job"></div>
+        <div class="cols mono" aria-hidden="true"><span>Tool</span><span>Job</span><span>Free access</span><span>What it does</span><span></span></div>
+        <ul class="rows" id="rows"></ul>
+        <p class="empty" id="empty" hidden>Nothing matches that. Clear the search or pick another job.</p>
+      </section>
     </div>
-    <div class="chips" id="chips" role="group" aria-label="Filter by job"></div>
-    <div class="cols mono" aria-hidden="true"><span>Tool</span><span>Job</span><span>Free access</span><span>What it does</span><span></span></div>
-    <ul class="rows" id="rows"></ul>
-    <p class="empty" id="empty" hidden>Nothing matches that. Clear the search or pick another job.</p>
-  </section>
+
+    <aside class="home-side" aria-labelledby="hs-h">
+      <p class="side-h mono" id="hs-h"><span>Free tools</span><span>8</span></p>
+      <nav class="toolnav" aria-label="Free Clipztool editing tools">
+      <a class="tn" href="tools.html#trim"><span>Trim video</span><span class="tn-out mono">MP4</span></a>
+      <a class="tn" href="tools.html#gif"><span>Video to GIF</span><span class="tn-out mono">GIF</span></a>
+      <a class="tn" href="tools.html#audio"><span>Extract audio</span><span class="tn-out mono">MP3</span></a>
+      <a class="tn" href="tools.html#compress"><span>Compress video</span><span class="tn-out mono">MP4</span></a>
+      <a class="tn" href="tools.html#resize"><span>Resize for Shorts and Reels</span><span class="tn-out mono">MP4</span></a>
+      <a class="tn" href="tools.html#speed"><span>Speed and reverse</span><span class="tn-out mono">MP4</span></a>
+      <a class="tn" href="tools.html#merge"><span>Merge clips</span><span class="tn-out mono">MP4</span></a>
+      <a class="tn" href="tools.html#watermark"><span>Add text watermark</span><span class="tn-out mono">MP4</span></a>
+      </nav>
+      <p class="side-note">Built into Clipztool. They run on your device and need a free account.</p>
+    </aside>
+  </div>
 
   <section class="free" id="free" aria-labelledby="free-h">
     <h2 id="free-h">How free is free</h2>
